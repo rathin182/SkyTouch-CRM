@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Eye, Key } from "lucide-react";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 
 export default function Integrations() {
@@ -11,40 +11,40 @@ export default function Integrations() {
   const [provider, setProvider] = useState("whatsapp-business-api");
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const res = await fetch("/api/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token: apiKey }),
-    });
+    try {
+      const res = await fetch("/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: apiKey }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      console.error("Error saving API key:", data.error);
-      toast.error(data.error || "Failed to save API key.");
-      return;
+      if (!res.ok) {
+        console.error("Error saving API key:", data.error);
+        toast.error(data.error || "Failed to save API key.");
+        return;
+      }
+
+      toast.success("API key saved successfully!");
+      console.log("Saved key response:", data);
+      setApiKey("");
+      setApiSecret("");
+    } catch (error) {
+      console.error("Error submitting API key:", error);
+      toast.error("Something went wrong while saving the API key.");
     }
+  };
 
-    toast.success("API key saved successfully!");
-    console.log("Saved key response:", data);
-    setApiKey("");
-    setApiSecret("");
-  } catch (error) {
-    console.error("Error submitting API key:", error);
-    toast.error("Something went wrong while saving the API key.");
-  }
-};
-
-useEffect(() => {
+  useEffect(() => {
     const fetchBanners = async () => {
       try {
         const res = await axios.get("/api/token");
-      console.log(res.data);
+        console.log(res.data);
       } catch (err) {
         console.error("Error fetching banners:", err);
       }
@@ -53,25 +53,24 @@ useEffect(() => {
   }, []);
 
   return (
-    <div>
+    <div className="w-full">
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="flex flex-row items-center justify-between p-6 pb-0">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 sm:p-6 pb-0">
         <div className="h-full w-full">
-          <div className="font-semibold text-2xl">Integration</div>
-          <div className="text-base text-muted-foreground">
+          <div className="font-semibold text-xl sm:text-2xl">Integration</div>
+          <div className="text-sm sm:text-base text-muted-foreground">
             Manage your third-party integrations and API connections.
           </div>
         </div>
       </div>
 
       {/* main */}
-
-      <div className="px-0 py-6">
-        <div className="@container/main flex h-[calc(100vh-11rem)] flex-1 flex-col gap-4 overflow-scroll px-4">
+      <div className="px-2 sm:px-0 py-4 sm:py-6">
+        <div className="flex flex-col h-auto sm:h-[calc(100vh-11rem)] flex-1 gap-4 overflow-y-auto px-2 sm:px-4">
           <div className="w-full space-y-6">
-            <div className="text-card-foreground bg-card flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+            <div className="text-card-foreground bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
               {/* Header */}
-              <div className="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 border-b pb-6">
+              <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-4 sm:px-6 border-b pb-4 sm:pb-6">
                 <div className="flex items-center gap-2 font-semibold leading-none">
                   <Key className="h-5 w-5" />
                   WhatsApp Integration
@@ -79,9 +78,9 @@ useEffect(() => {
               </div>
 
               {/* Content */}
-              <div className="px-6">
+              <div className="px-4 sm:px-6">
                 <div className="space-y-4">
-                  <div className="mb-4 flex items-center gap-2">
+                  <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-2">
                     <div className="inline-flex items-center rounded-md border bg-card px-2 py-0.5 text-sm font-semibold hover:bg-accent hover:text-accent-foreground">
                       WhatsApp Business API
                     </div>
@@ -117,7 +116,7 @@ useEffect(() => {
                         value={apiKey}
                         onChange={(e) => setApiKey(e.target.value)}
                         placeholder="Enter your WhatsApp API Key"
-                        className="border-input  placeholder:text-muted-foreground flex h-10 w-full rounded-md border px-3 py-2 text-base md:text-sm"
+                        className="border-input placeholder:text-muted-foreground flex h-10 w-full rounded-md border px-3 py-2 text-base md:text-sm"
                         required
                       />
                     </div>
@@ -134,7 +133,7 @@ useEffect(() => {
                           value={apiSecret}
                           onChange={(e) => setApiSecret(e.target.value)}
                           placeholder="Enter your WhatsApp API Secret"
-                          className="border-input  placeholder:text-muted-foreground flex h-10 w-full rounded-md border px-3 py-2 text-base md:text-sm"
+                          className="border-input placeholder:text-muted-foreground flex h-10 w-full rounded-md border px-3 py-2 text-base md:text-sm"
                         />
                         <button
                           type="button"
@@ -168,10 +167,10 @@ useEffect(() => {
                     </div>
 
                     {/* Submit */}
-                    <div className="flex justify-end pt-4 ">
+                    <div className="flex justify-end pt-4">
                       <button
                         type="submit"
-                        className="inline-flex items-center justify-center rounded-md bg-[#f4f1f1] px-4 py-2 text-sm font-medium text-black hover:bg-[#cbc6c6]/90 focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-2 transition-all cursor-pointer"
+                        className="inline-flex items-center justify-center rounded-md bg-blue-400 px-4 py-2 text-sm font-medium text-white focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-2 transition-all"
                       >
                         Submit
                       </button>

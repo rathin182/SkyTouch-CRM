@@ -30,7 +30,7 @@ interface LayoutProps {
 const navigation = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Lead Management", href: "/leads", icon: Users },
-  { name: "WhatsApp Campaigns", href: "/whatsapp", icon: MessageCircle },
+  // { name: "WhatsApp Campaigns", href: "/whatsapp", icon: MessageCircle },
   { name: "Leads Follow-Up", href: "/follow-up", icon: Calendar },
   { name: "Invoice & Payment", href: "/invoices", icon: FileText },
   { name: "Employees", href: "/employees", icon: UsersRound },
@@ -40,32 +40,35 @@ const navigation = [
 
 export default function Layout({ children }: LayoutProps) {
   const pathname = usePathname();
- const { data: session } = useSession();
+  const { data: session } = useSession();
 
   return (
-    <div className="min-h-screen bg-background flex w-full">
+    <div className="min-h-screen  bg-gradient-to-br from-black via-black to-gray-600 flex w-full">
       {/* Sidebar */}
       <aside className="w-60 bg-sidebar border-r border-border flex flex-col">
         {/* Logo */}
-        <div className="p-6 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+        <div className="p-6 flex items-center  bg-gradient-to-br from-[#0f172a] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] gap-3 ">
+          <div className="w-10 border bg-cyan-500 text-white h-10 rounded-xl bg-primary flex items-center justify-center">
             <Cloud className="w-6 h-6 text-primary-foreground" />
           </div>
           <h1 className="text-lg font-bold text-foreground">SkyTouch CRM</h1>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav
+          className="flex-1 px-3 py-4 space-y-1 
+ bg-gradient-to-br from-[#0f172a] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  backdrop-blur-xl  transition-all duration-300"
+        >
           {navigation.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? "bg-[#262626] text-sidebar-accent-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-foreground"
+                    ? "bg-cyan-800/50 text-cyan-400 shadow-md"
+                    : "text-white/80 hover:bg-cyan-500/40 hover:text-white"
                 }`}
               >
                 <item.icon className="w-5 h-5" />
@@ -73,11 +76,14 @@ export default function Layout({ children }: LayoutProps) {
               </Link>
             );
           })}
-          <AuthButton />
+
+          <div className="pt-3">
+            <AuthButton />
+          </div>
         </nav>
 
         {/* Upgrade Section */}
-        <div className="p-4 m-3 bg-card rounded-xl border border-border">
+        <div className="p-4 m-3  bg-gradient-to-br from-[#0f172a]   to-[#0f172a]   border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] rounded-xl border border-border">
           <div className="flex items-center gap-2 mb-2 text-primary">
             <Cloud className="w-5 h-5" />
             <span className="font-semibold">Upgrade to Pro</span>
@@ -118,8 +124,12 @@ export default function Layout({ children }: LayoutProps) {
                 </AvatarFallback>
               </Avatar>
               <div className="text-sm">
-                <div className="font-semibold text-foreground">{session?.user?.name || "User"}</div>
-                <div className="text-xs text-muted-foreground">{session?.user?.role || "Guest"}</div>
+                <div className="font-semibold text-foreground">
+                  {session?.user?.name || "User"}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  {session?.user?.role || "Guest"}
+                </div>
               </div>
             </div>
           </div>

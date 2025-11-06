@@ -208,20 +208,20 @@ export default function LeadsPage() {
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 ">
           <Button
             variant="outline"
-            className="border-primary text-primary hover:bg-primary/10"
+            className="border-primary text-blue-500 bg-gradient-to-br from-[#1d3262] to-[#1b3268] hover:bg-primary/10"
             onMouseEnter={() => setHovered("facebook")}
             onMouseLeave={() => setHovered(null)}
           >
-            <FaFacebook className="mr-2 text-[#0866ff]" />
+            <FaFacebook className="mr-2 text-[#0866ff] "  />
             {hovered === "facebook" ? "Coming Soon" : "Import from Meta"}
           </Button>
 
           <Button
             variant="outline"
-            className="border-primary text-primary hover:bg-primary/10"
+            className="border-primary text-red-500 bg-gradient-to-br from-[#621d31] to-[#3b0b20]  hover:bg-primary/10"
             onMouseEnter={() => setHovered("google")}
             onMouseLeave={() => setHovered(null)}
           >
@@ -232,7 +232,7 @@ export default function LeadsPage() {
           <Button
             onClick={() => router.push("/leadform")}
             variant="outline"
-            className="border-success text-success hover:bg-success/10"
+            className="border-success text-success bg-gradient-to-br from-[#154421] to-[#114712]  hover:bg-success/10"
           >
             <Upload className="w-4 h-4 mr-2" />
             Upload CSV
@@ -240,7 +240,7 @@ export default function LeadsPage() {
 
           <Button
             onClick={() => setShowAddModal(true)}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            className="bg-gradient-to-br from-[#264eaa] to-[#456ecf]  hover:bg-primary/90 text-primary-foreground"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Lead
@@ -249,13 +249,13 @@ export default function LeadsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-4 gap-4">
         {stats.map((stat) => (
-          <Card key={stat.title} className="p-6 bg-card border-border">
+          <Card key={stat.title} className="p-6  bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-border">
             <div className="flex items-start justify-between mb-4">
               <p className="text-sm text-muted-foreground">{stat.title}</p>
               <div
-                className={`w-12 h-12 rounded-xl ${stat.color}/20 flex items-center justify-center`}
+                className={`w-12 h-12 rounded-xl bg-green-900/20 flex items-center justify-center`}
               >
                 <stat.icon
                   className={`w-6 h-6 ${
@@ -276,8 +276,8 @@ export default function LeadsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-4">
-        <div className="flex-1 relative">
+      <div className="flex items-center gap-4 py-5 px-2 rounded-2xl bg-gradient-to-br from-[#0f172a]  to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
+        <div className="flex-1 relative ">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <Input
             placeholder="Search leads..."
@@ -302,7 +302,7 @@ export default function LeadsPage() {
       </div>
 
       {/* Table */}
-      <Card className="bg-card border-border">
+      <Card className="bg-card border-border  bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
         <div className="p-6 border-b border-border flex items-center justify-between">
           <h3 className="text-lg font-semibold text-foreground">
             Leads ({filteredLeads.length})

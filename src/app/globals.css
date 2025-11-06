@@ -32,7 +32,7 @@
     --color-sidebar-foreground: hsl(0 0% 90%);
     --color-sidebar-primary: hsl(0 0% 100%);
     --color-sidebar-primary-foreground: hsl(0 0% 0%);
-    --color-sidebar-accent: hsl(0 0% 15%);
+    --color-sidebar-accent: hsl(0, 0%, 15%);
     --color-sidebar-accent-foreground: hsl(0 0% 100%);
     --color-sidebar-border: hsl(0 0% 15%);
     --color-sidebar-ring: hsl(0 0% 100%);

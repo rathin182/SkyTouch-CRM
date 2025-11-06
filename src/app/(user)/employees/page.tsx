@@ -229,7 +229,7 @@ export default function Employees() {
       {/* Add User Button */}
       <button
         onClick={() => setOpenCreateUser(true)}
-        className="inline-flex items-center gap-2 rounded-md bg-[#cbc6c6] px-4 py-2 text-sm font-medium text-black transition-all hover:bg-[#cbc6c6]/90 active:scale-95"
+        className="inline-flex items-center gap-2 rounded-md bg-blue-400 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-[#cbc6c6]/90 active:scale-95"
       >
         Add User
       </button>
@@ -241,11 +241,11 @@ export default function Employees() {
 
       {/* Stats */}
       <div className="flex flex-col pb-6">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1  gap-4 md:grid-cols-2 xl:grid-cols-4">
           {stats.map((s, i) => (
             <div
               key={i}
-              className="flex flex-col gap-3 rounded-xl border bg-card p-6 shadow-sm"
+              className="flex flex-col gap-3  bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]   border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  rounded-xl border bg-card p-6 "
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -285,7 +285,7 @@ export default function Employees() {
             >
               {selectedRole}
               <ChevronDown
-                className={`ml-2 h-4 w-4 transition-transform ${
+                className={`ml-2 h-4 w-4  transition-transform ${
                   roleOpen ? "rotate-180" : ""
                 }`}
               />
@@ -314,7 +314,7 @@ export default function Employees() {
       </div>
 
       {/* Table */}
-      <div className="mt-4 min-h-[60vh] rounded-xl border bg-card p-6 shadow-sm">
+      <div className="mt-4 min-h-[60vh] rounded-xl   bg-card p-6  bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
         {loading ? (
           <div className="py-12 text-center text-muted-foreground">
             Loading users...

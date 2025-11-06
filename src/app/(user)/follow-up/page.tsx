@@ -206,7 +206,7 @@ const Page = () => {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="border-border">
+            <Button variant="outline" className="border-border bg-gradient-to-br from-[#264eaa] to-[#456ecf]">
               <CalendarIcon className="w-4 h-4 mr-2" />
               List View
             </Button>
@@ -214,7 +214,7 @@ const Page = () => {
               <CalendarIcon className="w-4 h-4 mr-2" />
               Calendar View
             </Button>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground bg-gradient-to-br from-[#264eaa] to-[#456ecf]">
               <Plus className="w-4 h-4 mr-2" />
               Schedule Follow-Up
             </Button>
@@ -224,7 +224,7 @@ const Page = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat) => (
-            <Card key={stat.title} className="p-6 bg-card border-border">
+            <Card key={stat.title} className="p-6 bg-card  bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-border">
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">
@@ -242,7 +242,7 @@ const Page = () => {
                   )}
                 </div>
                 <div
-                  className={`w-12 h-12 rounded-xl ${stat.color}/20 flex items-center justify-center`}
+                  className={`w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center`}
                 >
                   <stat.icon
                     className={`w-6 h-6 ${
@@ -265,7 +265,7 @@ const Page = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 bg-gradient-to-br to-[#0f172a]">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
@@ -333,7 +333,7 @@ const Page = () => {
         </div>
 
         {/* Activities Table */}
-        <Card className="bg-card border-border">
+        <Card className="bg-card border-border bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  ">
           <div className="p-6 border-b border-border flex items-center justify-between">
             <h3 className="text-lg font-semibold text-foreground">
               Follow-Up Activities
