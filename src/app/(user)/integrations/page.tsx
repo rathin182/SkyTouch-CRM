@@ -68,7 +68,7 @@ export default function Integrations() {
       <div className="px-2 sm:px-0 py-4 sm:py-6">
         <div className="flex flex-col h-auto sm:h-[calc(100vh-11rem)] flex-1 gap-4 overflow-y-auto px-2 sm:px-4">
           <div className="w-full space-y-6">
-            <div className="text-card-foreground bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+            <div className="text-card-foreground bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
               {/* Header */}
               <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-4 sm:px-6 border-b pb-4 sm:pb-6">
                 <div className="flex items-center gap-2 font-semibold leading-none">

@@ -224,7 +224,7 @@ const Page = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat) => (
-            <Card key={stat.title} className="p-6 bg-card  bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-border">
+            <Card key={stat.title} className="p-6 bg-card  bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-border">
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">
@@ -333,7 +333,7 @@ const Page = () => {
         </div>
 
         {/* Activities Table */}
-        <Card className="bg-card border-border bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  ">
+        <Card className="bg-card border-border bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  ">
           <div className="p-6 border-b border-border flex items-center justify-between">
             <h3 className="text-lg font-semibold text-foreground">
               Follow-Up Activities
@@ -392,18 +392,19 @@ const Page = () => {
                     </td>
                     <td className="p-4">{activity.type}</td>
                     <td className="p-4">
-                      <Badge
-                        variant="secondary"
-                        className={
-                          activity.priority === "High"
-                            ? "bg-destructive/20 text-destructive"
-                            : activity.priority === "Medium"
-                            ? "bg-warning/20 text-warning"
-                            : "bg-success/20 text-success"
-                        }
-                      >
-                        {activity.priority}
-                      </Badge>
+                   <Badge
+  variant="secondary"
+  className={
+    activity.priority === "High"
+      ? "bg-red-500/15 text-red-600"
+      : activity.priority === "Medium"
+      ? "bg-amber-500/15 text-amber-600 "
+      : "bg-green-500/15 text-green-600 "
+  }
+>
+  {activity.priority}
+</Badge>
+
                     </td>
                     <td className="p-4">
                       <div className="text-sm text-foreground">
@@ -418,10 +419,10 @@ const Page = () => {
                         variant="secondary"
                         className={
                           activity.status === "Overdue"
-                            ? "bg-destructive/20 text-destructive"
+                            ? "bg-cyan-950 text-cyan-500"
                             : activity.status === "Pending"
-                            ? "bg-warning/20 text-warning"
-                            : "bg-success/20 text-success"
+                            ? "bg-pink-950 text-pink-500"
+                            : "bg-green-950 text-green-400"
                         }
                       >
                         {activity.status}

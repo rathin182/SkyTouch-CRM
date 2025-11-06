@@ -12,15 +12,14 @@ import {
   UserPlus,
   CheckCircle,
   Flame,
-} from "lucide-react";
-import { FaGoogle, FaFacebook } from "react-icons/fa";
+ } from "lucide-react";
+import { FaGoogle, FaFacebook, FaGlobe, FaUserFriends, FaInstagram  } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import LeadsModal from "@/components/ui/LeadsModal";
-import {
+ import {
   Select,
   SelectContent,
   SelectItem,
@@ -32,9 +31,8 @@ import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import LeadsAddModal from "@/components/LeadsAddModal";
 import LeadViewModal from "@/components/LeadViewModal";
-import LeadEditModal from "@/components/LeadEditModal";
-import LeadsEditModal from "@/components/LeadEditModal";
-
+ import LeadsEditModal from "@/components/LeadEditModal";
+ 
 interface Lead {
   id: string;
   name: string;
@@ -50,15 +48,17 @@ interface Lead {
 }
 
 const getSourceIcon = (source: string) => {
-  const icons: { [key: string]: string } = {
-    Facebook: "f",
-    Google: "G",
-    Website: "🌐",
-    Referral: "👥",
-    Instagram: "📷",
+   const icons: { [key: string]: JSX.Element } = {
+    FACEBOOK: <FaFacebook className="text-blue-600" />,
+    GOOGLE: <FaGoogle className="text-red-500" />,
+     WEBSITE: <FaGlobe className="text-green-500" />,
+    REFRREL: <FaUserFriends className="text-purple-500" />,
+    INSTAGRAM: <FaInstagram className="text-pink-500" />,
   };
-  return icons[source] || "•";
+
+  return icons[source] || <FaGlobe className="text-gray-400" />;
 };
+
 
 export default function LeadsPage() {
   const router = useRouter();
@@ -70,7 +70,9 @@ export default function LeadsPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedStage, setSelectedStage] = useState<string>("");
   const [selectedTag, setSelectedTag] = useState<string>("");
-  const [popup, setPopup] = useState<null | "add" | "view" | "edit" | "delete">(null);
+  const [popup, setPopup] = useState<null | "add" | "view" | "edit" | "delete">(
+    null
+  );
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
   const closePopup = () => setPopup(null);
@@ -202,7 +204,9 @@ export default function LeadsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-foreground">Lead Management</h2>
+          <h2 className="text-3xl font-bold text-foreground">
+            Lead Management
+          </h2>
           <p className="text-sm text-muted-foreground">
             Manage and track your leads efficiently
           </p>
@@ -215,7 +219,7 @@ export default function LeadsPage() {
             onMouseEnter={() => setHovered("facebook")}
             onMouseLeave={() => setHovered(null)}
           >
-            <FaFacebook className="mr-2 text-[#0866ff] "  />
+            <FaFacebook className="mr-2 text-[#0866ff] " />
             {hovered === "facebook" ? "Coming Soon" : "Import from Meta"}
           </Button>
 
@@ -251,7 +255,10 @@ export default function LeadsPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-4 gap-4">
         {stats.map((stat) => (
-          <Card key={stat.title} className="p-6  bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-border">
+          <Card
+            key={stat.title}
+            className="p-6  bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-border"
+          >
             <div className="flex items-start justify-between mb-4">
               <p className="text-sm text-muted-foreground">{stat.title}</p>
               <div
@@ -302,7 +309,7 @@ export default function LeadsPage() {
       </div>
 
       {/* Table */}
-      <Card className="bg-card border-border  bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
+      <Card className="bg-card border-border  bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
         <div className="p-6 border-b border-border flex items-center justify-between">
           <h3 className="text-lg font-semibold text-foreground">
             Leads ({filteredLeads.length})
@@ -351,7 +358,10 @@ export default function LeadsPage() {
               </thead>
               <tbody>
                 {filteredLeads.map((lead) => (
-                  <tr key={lead.id} className="border-b border-border hover:bg-secondary/50">
+                  <tr
+                    key={lead.id}
+                    className="border-b border-border hover:bg-secondary/50"
+                  >
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <Avatar className="w-10 h-10 bg-info">
@@ -375,20 +385,53 @@ export default function LeadsPage() {
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="text-sm text-foreground">{lead.email}</div>
+                      <div className="text-sm text-foreground">
+                        {lead.email}
+                      </div>
                       <div className="text-sm text-muted-foreground">
                         {lead.phone}
                       </div>
                     </td>
                     <td className="p-4 flex items-center gap-2">
-                      <span className="text-lg">{getSourceIcon(lead.source)}</span>
-                      <span className="text-sm text-foreground">{lead.source}</span>
+                      <span className="text-lg">
+                        {getSourceIcon(lead.source)}
+                      </span>
+                      <span className="text-sm text-foreground">
+                        {lead.source}
+                      </span>
                     </td>
                     <td className="p-4">
-                      <Badge variant="secondary">{lead.stage}</Badge>
+                      {/* Stage Badge */}
+                      <Badge
+                        className={
+                          lead.stage === "N"
+                            ? "bg-blue-100 text-blue-600"
+                            : lead.stage === "In Progress"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : lead.stage === "Closed"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-gray-100 text-gray-700"
+                        }
+                      >
+                        {lead.stage}
+                      </Badge>
                     </td>
+
                     <td className="p-4">
-                      <Badge variant="secondary">{lead.tag}</Badge>
+                      {/* Tag Badge */}
+                      <Badge
+                        className={
+                          lead.tag === "HOT"
+                            ? "bg-red-950 text-red-600"
+                            : lead.tag === "WARM"
+                            ? "bg-yellow-950 text-yellow-600"
+                            : lead.tag === "COLD"
+                            ? "bg-blue-950 text-blue-500"
+                            : "bg-purple-950 text-purple-700"
+                        }
+                      >
+                        {lead.tag}
+                      </Badge>
                     </td>
                     <td className="p-4 font-semibold text-foreground">
                       {lead.value}
@@ -439,15 +482,15 @@ export default function LeadsPage() {
       )}
 
       {popup === "view" && selectedLead && (
-  <LeadViewModal lead={selectedLead} closePopup={closePopup} />
-)}
+        <LeadViewModal lead={selectedLead} closePopup={closePopup} />
+      )}
       {popup === "edit" && selectedLead && (
-  <LeadsEditModal
-    leadId={selectedLead.id}
-    onClose={closePopup}
-    onLeadUpdated={fetchLeads}
-  />
-)}
+        <LeadsEditModal
+          leadId={selectedLead.id}
+          onClose={closePopup}
+          onLeadUpdated={fetchLeads}
+        />
+      )}
     </div>
   );
 }

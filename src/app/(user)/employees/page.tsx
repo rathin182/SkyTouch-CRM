@@ -229,7 +229,7 @@ export default function Employees() {
       {/* Add User Button */}
       <button
         onClick={() => setOpenCreateUser(true)}
-        className="inline-flex items-center gap-2 rounded-md bg-blue-400 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-[#cbc6c6]/90 active:scale-95"
+        className="inline-flex items-center gap-2 rounded-md bg-blue-400 px-4 py-2 text-sm font-medium text-white transition-all active:scale-95"
       >
         Add User
       </button>
@@ -245,7 +245,7 @@ export default function Employees() {
           {stats.map((s, i) => (
             <div
               key={i}
-              className="flex flex-col gap-3  bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]   border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  rounded-xl border bg-card p-6 "
+              className="flex flex-col gap-3  bg-gradient-to-br from-[#0f172a]  to-[#0f172a]   border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  rounded-xl border bg-card p-6 "
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -255,7 +255,9 @@ export default function Employees() {
                     {s.description}
                   </div>
                 </div>
+                <span className="bg-blue-950 py-2 px-3 rounded-2xl">
                 {s.icon}
+                </span>
               </div>
             </div>
           ))}
@@ -314,7 +316,7 @@ export default function Employees() {
       </div>
 
       {/* Table */}
-      <div className="mt-4 min-h-[60vh] rounded-xl   bg-card p-6  bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
+      <div className="mt-4 min-h-[60vh] rounded-xl   bg-card p-6  bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
         {loading ? (
           <div className="py-12 text-center text-muted-foreground">
             Loading users...
@@ -364,14 +366,14 @@ export default function Employees() {
                         onClick={() => openModal("view", u)} // Pass user 'u'
                         className="p-1 hover:text-primary"
                       >
-                        <Eye className="h-4 w-4 text-muted-foreground" />
+                        <Eye className="h-4 w-4 text-blue-600 text-muted-foreground" />
                       </button>
                       <button
                         title="Edit"
                         onClick={() => openModal("edit", u)} // Pass user 'u'
                         className="p-1 hover:text-primary"
                       >
-                        <SquarePen className="h-4 w-4 text-muted-foreground" />
+                        <SquarePen className="h-4 w-4 text-amber-400 text-muted-foreground" />
                       </button>
                     </div>
                   </td>

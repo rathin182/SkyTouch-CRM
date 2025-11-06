@@ -208,7 +208,7 @@ export default function Dashboard() {
         {stats.map((stat) => (
           <Card
             key={stat.title}
-            className="p-6 rounded-2xl bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] "
+            className="p-6 rounded-2xl bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] "
           >
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -317,7 +317,7 @@ export default function Dashboard() {
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2  gap-6">
         {/* Leads To Follow-Up With */}
-        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
+        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a]  to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-foreground">
               Leads To Follow-Up With
@@ -359,12 +359,12 @@ export default function Dashboard() {
                       variant="secondary"
                       className={
                         lead.status === "New"
-                          ? "bg-info/20 text-info"
+                          ? "bg-cyan-900 text-cyan-500"
                           : lead.status === "Contacted"
-                          ? "bg-warning/20 text-warning"
+                          ? "bg-orange-950 text-orange-500"
                           : lead.status === "In-Progress"
-                          ? "bg-warning/20 text-warning"
-                          : "bg-success/20 text-success"
+                          ? "bg-yellow-950 text-yellow-500"
+                          : "bg-green-950 text-green-500"
                       }
                     >
                       {lead.status}
@@ -377,13 +377,13 @@ export default function Dashboard() {
         </Card>
 
         {/* Upcoming Reminders */}
-        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
+        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a]  to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-foreground">
               Upcoming Reminders
             </h2>
             <div className="flex gap-2">
-              <Button variant="ghost" size="sm" className="text-primary">
+              <Button variant="ghost" size="sm" className="text-primary bg-blue-400">
                 <Calendar className="w-4 h-4 mr-2" />
                 Schedule Follow-up
               </Button>
@@ -437,7 +437,7 @@ export default function Dashboard() {
       {/* Reminders and Notes */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Campaign Performance */}
-        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
+        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a]  to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-foreground">
               Campaign Performance
@@ -459,8 +459,8 @@ export default function Dashboard() {
                     variant="secondary"
                     className={
                       campaign.status === "Active"
-                        ? "bg-success/20 text-success"
-                        : "bg-muted text-muted-foreground"
+                        ? "bg-green-950 text-green-500"
+                        : "bg-red-950 text-red-500"
                     }
                   >
                     {campaign.status}
@@ -500,8 +500,8 @@ export default function Dashboard() {
         </Card>
 
         {/* Ad Section */}
-        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  flex flex-col items-center justify-center text-center">
-          <div className="w-16 h-16 rounded-full bg-warning/20 flex items-center justify-center mb-4">
+        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a]  to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  flex flex-col items-center justify-center text-center">
+          <div className="w-16 h-16 rounded-full bg-yellow-900  flex items-center justify-center mb-4">
             <Image className="w-8 h-8 text-warning" />
           </div>
           <h3 className="text-lg font-semibold text-foreground mb-2 flex items-center gap-2">
@@ -510,7 +510,7 @@ export default function Dashboard() {
           <p className="text-sm text-muted-foreground mb-6">
             Remove ads and unlock premium features with SkyTouch Pro
           </p>
-          <div className="w-full p-6 mb-4 bg-secondary rounded-lg border border-border">
+          <div className="w-full p-6 mb-4 bg-pink-950 rounded-lg border border-border">
             <div className="text-xs text-muted-foreground mb-2">
               Sample Ad Space
             </div>
@@ -521,7 +521,7 @@ export default function Dashboard() {
               XYZ Features Of Ads
             </div>
           </div>
-          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+          <Button className="w-full bg-blue-400 hover:bg-primary/90 text-primary-foreground">
             Get Pro Version
           </Button>
         </Card>
