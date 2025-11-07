@@ -45,7 +45,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen  bg-gradient-to-br from-black via-black to-gray-600 flex w-full">
       {/* Sidebar */}
-      <aside className="w-60 bg-sidebar border-r border-border flex flex-col">
+      <aside className="w-60 bg-gradient-to-tl from-black via-[#080b12] to-[#0e1421] border-r border-b border-border max-h-screen rounded-md flex flex-col text-white">
         {/* Logo */}
         <div className="p-6 flex items-center  bg-gradient-to-br from-[#0f172a] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] gap-3 ">
           <div className="w-10 border bg-cyan-500 text-white h-10 rounded-xl bg-primary flex items-center justify-center">
@@ -57,7 +57,7 @@ export default function Layout({ children }: LayoutProps) {
         {/* Navigation */}
         <nav
           className="flex-1 px-3 py-4 space-y-1 
- bg-gradient-to-br from-[#0f172a] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  backdrop-blur-xl  transition-all duration-300"
+ "
         >
           {navigation.map((item) => {
             const isActive = pathname === item.href;
