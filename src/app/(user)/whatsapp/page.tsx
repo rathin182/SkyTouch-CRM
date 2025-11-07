@@ -90,6 +90,7 @@ export default function WhatsAppPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ campaignId, status }),
+        credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to update status");
       const updated = await res.json();

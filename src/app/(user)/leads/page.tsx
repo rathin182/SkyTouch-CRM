@@ -48,15 +48,14 @@ interface Lead {
 }
 
 const getSourceIcon = (source: string) => {
-   const icons: { [key: string]: JSX.Element } = {
-    FACEBOOK: <FaFacebook className="text-blue-600" />,
-    GOOGLE: <FaGoogle className="text-red-500" />,
-     WEBSITE: <FaGlobe className="text-green-500" />,
-    REFRREL: <FaUserFriends className="text-purple-500" />,
-    INSTAGRAM: <FaInstagram className="text-pink-500" />,
+  const icons: { [key: string]: string } = {
+    Facebook: "f",
+    Google: "G",
+    Website: "🌐",
+    Referral: "👥",
+    Instagram: "📷",
   };
-
-  return icons[source] || <FaGlobe className="text-gray-400" />;
+  return icons[source] || "•";
 };
 
 
