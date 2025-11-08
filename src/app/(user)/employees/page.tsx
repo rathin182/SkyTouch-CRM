@@ -22,7 +22,7 @@ import CreateUser from "@/components/CreateUser";
 
 export interface BackendUser {
   id: string;
-  email?: string | null;
+  email?: string;
   name: string;
   role: string;
   createdAt: string;
