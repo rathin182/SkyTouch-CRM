@@ -12,14 +12,14 @@ import {
   UserPlus,
   CheckCircle,
   Flame,
- } from "lucide-react";
-import { FaGoogle, FaFacebook, FaGlobe, FaUserFriends, FaInstagram  } from "react-icons/fa";
+} from "lucide-react";
+import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
- import {
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -31,8 +31,8 @@ import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import LeadsAddModal from "@/components/LeadsAddModal";
 import LeadViewModal from "@/components/LeadViewModal";
- import LeadsEditModal from "@/components/LeadEditModal";
- 
+import LeadsEditModal from "@/components/LeadEditModal";
+
 interface Lead {
   id: string;
   name: string;
@@ -49,15 +49,14 @@ interface Lead {
 
 const getSourceIcon = (source: string) => {
   const icons: { [key: string]: string } = {
-    Facebook: "f",
-    Google: "G",
+    Facebook: "📘",
+    Google: "🟢",
     Website: "🌐",
     Referral: "👥",
     Instagram: "📷",
   };
   return icons[source] || "•";
 };
-
 
 export default function LeadsPage() {
   const router = useRouter();
@@ -67,16 +66,12 @@ export default function LeadsPage() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
-  const [selectedStage, setSelectedStage] = useState<string>("");
   const [selectedTag, setSelectedTag] = useState<string>("");
-  const [popup, setPopup] = useState<null | "add" | "view" | "edit" | "delete">(
-    null
-  );
+  const [popup, setPopup] = useState<null | "add" | "view" | "edit" | "delete">(null);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
   const closePopup = () => setPopup(null);
 
-  // ✅ Fetch leads from API
   const fetchLeads = async () => {
     try {
       setLoading(true);
@@ -95,7 +90,6 @@ export default function LeadsPage() {
     fetchLeads();
   }, []);
 
-  // ✅ Delete lead via API
   const handleDeleteLead = async (leadId: string): Promise<void> => {
     try {
       toast.loading("Deleting lead...");
@@ -108,7 +102,7 @@ export default function LeadsPage() {
         return;
       }
 
-      setLeads((prevLeads) => prevLeads.filter((lead) => lead.id !== leadId));
+      setLeads((prev) => prev.filter((lead) => lead.id !== leadId));
       toast.success("🗑️ Lead deleted successfully!");
     } catch (error) {
       console.error("Error deleting lead:", error);
@@ -117,225 +111,161 @@ export default function LeadsPage() {
     }
   };
 
-  const handleUpdateLead = async (leadId: string, data: Partial<Lead>) => {
-    await new Promise((resolve) => setTimeout(resolve, 300)); // placeholder
-    setLeads((prev) =>
-      prev.map((lead) => (lead.id === leadId ? { ...lead, ...data } : lead))
-    );
-  };
-
-  const openModal = (action: "view" | "edit" | "delete", lead: Lead | null) => {
+  const openModal = (action: "view" | "edit", lead: Lead) => {
     setSelectedLead(lead);
     setPopup(action);
   };
 
-  // 🧮 Stats
+  // Stats
   const stats = useMemo(() => {
-    const totalLeads = leads.length;
+    const total = leads.length;
     const now = new Date();
-    const oneWeekAgo = new Date();
-    oneWeekAgo.setDate(now.getDate() - 7);
-
-    const newThisWeek = leads.filter((lead) => {
-      const createdDate = new Date(lead.created);
-      return createdDate >= oneWeekAgo && createdDate <= now;
-    }).length;
-
-    const hotLeads = leads.filter(
-      (lead) => lead.tag.toLowerCase() === "hot"
+    const week = new Date();
+    week.setDate(now.getDate() - 7);
+    const newThisWeek = leads.filter(
+      (l) => new Date(l.created) >= week && new Date(l.created) <= now
     ).length;
+    const hot = leads.filter((l) => l.tag.toLowerCase() === "hot").length;
 
     return [
-      {
-        title: "Total Leads",
-        value: totalLeads.toString(),
-        icon: Users,
-        color: "bg-info",
-      },
-      {
-        title: "New This Week",
-        value: newThisWeek.toString(),
-        icon: UserPlus,
-        color: "bg-info",
-      },
-      {
-        title: "Converted",
-        value: "—",
-        icon: CheckCircle,
-        color: "bg-success",
-      },
-      {
-        title: "Hot Leads",
-        value: hotLeads.toString(),
-        icon: Flame,
-        color: "bg-warning",
-      },
+      { title: "Total Leads", value: total, icon: Users, color: "cyan" },
+      { title: "New This Week", value: newThisWeek, icon: UserPlus, color: "blue" },
+      { title: "Converted", value: "—", icon: CheckCircle, color: "green" },
+      { title: "Hot Leads", value: hot, icon: Flame, color: "orange" },
     ];
   }, [leads]);
 
-  // 🔍 Filtering
   const filteredLeads = useMemo(() => {
-    return leads.filter((lead) => {
-      const matchesSearch =
+    return leads.filter(
+      (lead) =>
         lead.name.toLowerCase().includes(search.toLowerCase()) ||
         lead.email.toLowerCase().includes(search.toLowerCase()) ||
-        lead.company.toLowerCase().includes(search.toLowerCase());
+        lead.company.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [leads, search]);
 
-      const matchesStage =
-        selectedStage && selectedStage !== "all"
-          ? lead.stage.toLowerCase() === selectedStage.toLowerCase()
-          : true;
-
-      const matchesTag =
-        selectedTag && selectedTag !== "all"
-          ? lead.tag.toLowerCase() === selectedTag.toLowerCase()
-          : true;
-
-      return matchesSearch && matchesStage && matchesTag;
-    });
-  }, [leads, search, selectedStage, selectedTag]);
-
-  // ✅ UI (unchanged)
+  // UI
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-8 space-y-8 min-h-screen text-white">
       <Toaster />
 
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-foreground">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
             Lead Management
           </h2>
-          <p className="text-sm text-muted-foreground">
-            Manage and track your leads efficiently
-          </p>
+          <p className="text-gray-400">Manage and track your leads efficiently</p>
         </div>
 
-        <div className="flex gap-2 ">
+        <div className="flex gap-2">
+          {/* Facebook Button with "Coming Soon" hover */}
           <Button
             variant="outline"
-            className="border-primary text-blue-500 bg-gradient-to-br from-[#1d3262] to-[#1b3268] hover:bg-primary/10"
             onMouseEnter={() => setHovered("facebook")}
             onMouseLeave={() => setHovered(null)}
+            className="bg-blue-900/30 text-blue-400 border border-blue-500/20 hover:shadow-[0_0_15px_rgba(0,122,255,0.3)] transition-all"
           >
-            <FaFacebook className="mr-2 text-[#0866ff] " />
+            <FaFacebook className="mr-2 text-[#0866ff]" />
             {hovered === "facebook" ? "Coming Soon" : "Import from Meta"}
           </Button>
 
+          {/* Google Button with "Coming Soon" hover */}
           <Button
             variant="outline"
-            className="border-primary text-red-500 bg-gradient-to-br from-[#621d31] to-[#3b0b20]  hover:bg-primary/10"
             onMouseEnter={() => setHovered("google")}
             onMouseLeave={() => setHovered(null)}
+            className="bg-red-900/30 text-red-400 border border-red-500/20 hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] transition-all"
           >
             <FaGoogle className="mr-2" />
             {hovered === "google" ? "Coming Soon" : "Import from Google"}
           </Button>
 
+          {/* Upload CSV */}
           <Button
             onClick={() => router.push("/leadform")}
-            variant="outline"
-            className="border-success text-success bg-gradient-to-br from-[#154421] to-[#114712]  hover:bg-success/10"
+            className="bg-emerald-900/30 text-emerald-400 border border-emerald-400/20 hover:shadow-[0_0_15px_rgba(0,255,150,0.3)] transition-all"
           >
-            <Upload className="w-4 h-4 mr-2" />
-            Upload CSV
+            <Upload className="w-4 h-4 mr-2" /> Upload CSV
           </Button>
 
+          {/* Add Lead */}
           <Button
             onClick={() => setShowAddModal(true)}
-            className="bg-gradient-to-br from-[#264eaa] to-[#456ecf]  hover:bg-primary/90 text-primary-foreground"
+            className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:scale-105 transition-all text-white shadow-[0_0_20px_rgba(0,255,255,0.3)]"
           >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Lead
+            <Plus className="w-4 h-4 mr-2" /> Add Lead
           </Button>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-4 gap-4">
-        {stats.map((stat) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((s) => (
           <Card
-            key={stat.title}
-            className="p-6  bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-border"
+            key={s.title}
+            className="p-6 rounded-2xl backdrop-blur-lg bg-gradient-to-br from-cyan-500/10 to-blue-500/5 border border-cyan-400/20 hover:shadow-[0_0_25px_rgba(0,255,255,0.3)] hover:scale-[1.03] transition-all"
           >
-            <div className="flex items-start justify-between mb-4">
-              <p className="text-sm text-muted-foreground">{stat.title}</p>
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-gray-400 text-sm">{s.title}</p>
               <div
-                className={`w-12 h-12 rounded-xl bg-green-900/20 flex items-center justify-center`}
+                className={`w-10 h-10 flex items-center justify-center rounded-lg bg-${s.color}-500/20`}
               >
-                <stat.icon
-                  className={`w-6 h-6 ${
-                    stat.color === "bg-info"
-                      ? "text-info"
-                      : stat.color === "bg-success"
-                      ? "text-success"
-                      : "text-warning"
-                  }`}
-                />
+                <s.icon className={`w-6 h-6 text-${s.color}-400`} />
               </div>
             </div>
-            <div className="text-3xl font-bold text-foreground">
-              {stat.value}
-            </div>
+            <p className="text-3xl font-semibold text-white">{s.value}</p>
           </Card>
         ))}
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-4 py-5 px-2 rounded-2xl bg-gradient-to-br from-[#0f172a]  to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
-        <div className="flex-1 relative ">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+      <div className="flex items-center gap-4 py-5 px-4 rounded-2xl backdrop-blur-lg bg-gradient-to-br from-[#0f172a]/80 to-[#1e293b]/40 border border-cyan-400/20 shadow-[0_0_20px_rgba(0,255,255,0.1)]">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
           <Input
             placeholder="Search leads..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 bg-card border-border"
+            className="pl-10 bg-transparent border border-cyan-400/20 text-white placeholder:text-gray-500 focus:border-cyan-400"
           />
         </div>
 
         <Select onValueChange={setSelectedTag}>
-          <SelectTrigger className="w-48 bg-card border-border">
+          <SelectTrigger className="w-48 bg-transparent border border-cyan-400/20 text-gray-300">
             <SelectValue placeholder="Filter by Tag" />
           </SelectTrigger>
-          <SelectContent className="bg-popover border-border">
+          <SelectContent className="bg-[#0f172a] text-gray-300 border border-cyan-400/20">
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="hot">Hot</SelectItem>
             <SelectItem value="warm">Warm</SelectItem>
-            <SelectItem value="qualified">Qualified</SelectItem>
             <SelectItem value="cold">Cold</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       {/* Table */}
-      <Card className="bg-card border-border  bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
-        <div className="p-6 border-b border-border flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">
+      <Card className="p-6 rounded-2xl backdrop-blur-xl bg-gradient-to-br from-[#0f172a]/80 to-[#1e293b]/40 border border-cyan-400/20 shadow-[0_0_25px_rgba(0,255,255,0.1)]">
+        <div className="flex items-center justify-between border-b border-cyan-400/10 pb-4 mb-4">
+          <h3 className="text-xl font-semibold text-cyan-300">
             Leads ({filteredLeads.length})
           </h3>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="border-border">
-              <Download className="w-4 h-4 mr-2" />
-              Export
-            </Button>
-          </div>
+          <Button variant="outline" className="border-cyan-400/30 text-cyan-300">
+            <Download className="w-4 h-4 mr-2" /> Export
+          </Button>
         </div>
 
         {loading ? (
-          <div className="p-6 text-center text-muted-foreground">
-            Loading leads...
-          </div>
+          <p className="text-gray-400 text-center py-6">Loading leads...</p>
         ) : error ? (
-          <div className="p-6 text-center text-destructive">{error}</div>
+          <p className="text-red-400 text-center py-6">{error}</p>
         ) : filteredLeads.length === 0 ? (
-          <div className="p-6 text-center text-muted-foreground">
-            No leads found
-          </div>
+          <p className="text-gray-400 text-center py-6">No leads found.</p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="border-b border-border">
-                <tr>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="text-gray-400 border-b border-cyan-400/10">
                   {[
                     "Lead",
                     "Contact",
@@ -346,10 +276,7 @@ export default function LeadsPage() {
                     "Created",
                     "Actions",
                   ].map((h) => (
-                    <th
-                      key={h}
-                      className="text-left p-4 text-sm font-medium text-muted-foreground"
-                    >
+                    <th key={h} className="text-left py-3 px-4 text-sm font-medium">
                       {h}
                     </th>
                   ))}
@@ -359,90 +286,53 @@ export default function LeadsPage() {
                 {filteredLeads.map((lead) => (
                   <tr
                     key={lead.id}
-                    className="border-b border-border hover:bg-secondary/50"
+                    className="border-b border-cyan-400/10 hover:bg-white/5 transition-all"
                   >
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="w-10 h-10 bg-info">
-                          <AvatarFallback className="bg-info text-white font-semibold">
-                            {lead.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")
-                              .slice(0, 2)
-                              .toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <div className="font-medium text-foreground">
-                            {lead.name}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {lead.company}
-                          </div>
-                        </div>
+                    <td className="p-4 flex items-center gap-3">
+                      <Avatar className="w-10 h-10 bg-cyan-500/30">
+                        <AvatarFallback className="text-white font-semibold">
+                          {lead.name[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium text-white">{lead.name}</p>
+                        <p className="text-sm text-gray-400">{lead.company}</p>
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="text-sm text-foreground">
-                        {lead.email}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        {lead.phone}
-                      </div>
+                      <p className="text-sm">{lead.email}</p>
+                      <p className="text-xs text-gray-500">{lead.phone}</p>
                     </td>
-                    <td className="p-4 flex items-center gap-2">
-                      <span className="text-lg">
-                        {getSourceIcon(lead.source)}
-                      </span>
-                      <span className="text-sm text-foreground">
-                        {lead.source}
-                      </span>
+                    <td className="p-4 flex items-center gap-2 text-sm">
+                      {getSourceIcon(lead.source)} {lead.source}
                     </td>
                     <td className="p-4">
-                      {/* Stage Badge */}
-                      <Badge
-                        className={
-                          lead.stage === "N"
-                            ? "bg-blue-100 text-blue-600"
-                            : lead.stage === "In Progress"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : lead.stage === "Closed"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-gray-100 text-gray-700"
-                        }
-                      >
+                      <Badge className="bg-cyan-900/30 text-cyan-300 border border-cyan-400/20">
                         {lead.stage}
                       </Badge>
                     </td>
-
                     <td className="p-4">
-                      {/* Tag Badge */}
                       <Badge
-                        className={
+                        className={`${
                           lead.tag === "HOT"
-                            ? "bg-red-950 text-red-600"
+                            ? "bg-red-900/30 text-red-400 border border-red-500/30"
                             : lead.tag === "WARM"
-                            ? "bg-yellow-950 text-yellow-600"
-                            : lead.tag === "COLD"
-                            ? "bg-blue-950 text-blue-500"
-                            : "bg-purple-950 text-purple-700"
-                        }
+                            ? "bg-yellow-900/30 text-yellow-400 border border-yellow-500/30"
+                            : "bg-blue-900/30 text-blue-400 border border-blue-500/30"
+                        }`}
                       >
                         {lead.tag}
                       </Badge>
                     </td>
-                    <td className="p-4 font-semibold text-foreground">
+                    <td className="p-4 font-semibold text-cyan-300">
                       {lead.value}
                     </td>
-                    <td className="p-4 text-sm text-muted-foreground">
-                      {lead.created}
-                    </td>
+                    <td className="p-4 text-sm text-gray-400">{lead.created}</td>
                     <td className="p-4 flex gap-1">
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0 text-info hover:bg-info/10"
+                        className="text-cyan-300 hover:bg-cyan-500/10"
                         onClick={() => openModal("view", lead)}
                       >
                         <Eye className="w-4 h-4" />
@@ -450,7 +340,7 @@ export default function LeadsPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0 text-warning hover:bg-warning/10"
+                        className="text-yellow-300 hover:bg-yellow-500/10"
                         onClick={() => openModal("edit", lead)}
                       >
                         <Edit className="w-4 h-4" />
@@ -458,10 +348,10 @@ export default function LeadsPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10"
+                        className="text-red-400 hover:bg-red-500/10"
                         onClick={() => handleDeleteLead(lead.id)}
                       >
-                        <Trash className="w-4 h-4 text-red-600" />
+                        <Trash className="w-4 h-4" />
                       </Button>
                     </td>
                   </tr>
@@ -472,7 +362,6 @@ export default function LeadsPage() {
         )}
       </Card>
 
-      {/* ✅ Real modal added here */}
       {showAddModal && (
         <LeadsAddModal
           onClose={() => setShowAddModal(false)}

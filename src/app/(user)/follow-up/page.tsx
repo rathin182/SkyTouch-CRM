@@ -35,108 +35,22 @@ interface Activity {
   status: "Overdue" | "Pending" | "Completed";
   avatar: string;
 }
-
-// Lead is an alias of Activity, so they are structurally the same
 interface Lead extends Activity {}
 
 const stats = [
-  {
-    title: "Urgent",
-    subtitle: "Overdue Follow-ups",
-    value: "8",
-    icon: AlertCircle,
-    color: "bg-destructive",
-  },
-  {
-    title: "Today",
-    subtitle: "Due Today",
-    value: "15",
-    icon: Clock,
-    color: "bg-warning",
-  },
-  {
-    title: "This Week",
-    subtitle: "Scheduled",
-    value: "42",
-    icon: CalendarIcon,
-    color: "bg-info",
-  },
-  {
-    title: "Completed",
-    value: "127",
-    change: "+18%",
-    icon: CheckCircle,
-    color: "bg-success",
-  },
+  { title: "Urgent", subtitle: "Overdue Follow-ups", value: "8", icon: AlertCircle, color: "text-red-500" },
+  { title: "Today", subtitle: "Due Today", value: "15", icon: Clock, color: "text-yellow-400" },
+  { title: "This Week", subtitle: "Scheduled", value: "42", icon: CalendarIcon, color: "text-cyan-400" },
+  { title: "Completed", subtitle: "Total Done", value: "127", icon: CheckCircle, color: "text-green-400" },
 ];
 
 const initialActivities: Activity[] = [
-  {
-    id: 1,
-    name: "Karan Malhotra",
-    company: "Media House",
-    type: "Call",
-    priority: "Medium",
-    scheduled: "636 days ago",
-    time: "12:00",
-    status: "Overdue",
-    avatar: "KM",
-  },
-  {
-    id: 2,
-    name: "Pooja Bansal",
-    company: "Travel Agency",
-    type: "Follow-Up",
-    priority: "Low",
-    scheduled: "635 days ago",
-    time: "17:00",
-    status: "Overdue",
-    avatar: "PB",
-  },
-  {
-    id: 3,
-    name: "Sanjay Kapoor",
-    company: "Automotive Parts",
-    type: "Email",
-    priority: "High",
-    scheduled: "634 days ago",
-    time: "08:30",
-    status: "Overdue",
-    avatar: "SK",
-  },
-  {
-    id: 4,
-    name: "Rajesh Kumar",
-    company: "Tech Solutions Pvt Ltd",
-    type: "Call",
-    priority: "High",
-    scheduled: "633 days ago",
-    time: "10:00",
-    status: "Pending",
-    avatar: "RK",
-  },
-  {
-    id: 5,
-    name: "Priya Sharma",
-    company: "Digital Marketing Co",
-    type: "Email",
-    priority: "Medium",
-    scheduled: "633 days ago",
-    time: "14:30",
-    status: "Pending",
-    avatar: "PS",
-  },
-  {
-    id: 6,
-    name: "Amit Patel",
-    company: "Manufacturing Ltd",
-    type: "Meeting",
-    priority: "High",
-    scheduled: "632 days ago",
-    time: "11:00",
-    status: "Pending",
-    avatar: "AP",
-  },
+  { id: 1, name: "Karan Malhotra", company: "Media House", type: "Call", priority: "Medium", scheduled: "636 days ago", time: "12:00", status: "Overdue", avatar: "KM" },
+  { id: 2, name: "Pooja Bansal", company: "Travel Agency", type: "Follow-Up", priority: "Low", scheduled: "635 days ago", time: "17:00", status: "Overdue", avatar: "PB" },
+  { id: 3, name: "Sanjay Kapoor", company: "Automotive Parts", type: "Email", priority: "High", scheduled: "634 days ago", time: "08:30", status: "Overdue", avatar: "SK" },
+  { id: 4, name: "Rajesh Kumar", company: "Tech Solutions Pvt Ltd", type: "Call", priority: "High", scheduled: "633 days ago", time: "10:00", status: "Pending", avatar: "RK" },
+  { id: 5, name: "Priya Sharma", company: "Digital Marketing Co", type: "Email", priority: "Medium", scheduled: "633 days ago", time: "14:30", status: "Pending", avatar: "PS" },
+  { id: 6, name: "Amit Patel", company: "Manufacturing Ltd", type: "Meeting", priority: "High", scheduled: "632 days ago", time: "11:00", status: "Pending", avatar: "AP" },
 ];
 
 const quickFilters = [
@@ -155,324 +69,173 @@ const Page = () => {
 
   const handleCompleteActivity = (activityId: number) => {
     setActivities((prev) => prev.filter((a) => a.id !== activityId));
-    console.log(
-      `Activity ID: ${activityId} marked as completed and removed from list.`
-    );
   };
 
-  const handleUpdateLead = async (
-    leadId: string | number,
-    data: Partial<Lead>
-  ): Promise<void> => {
-    console.log(`Simulating update for lead ${leadId} with data:`, data);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    // Update the state with the new data
-    setActivities((prevActivities) =>
-      prevActivities.map((activity) =>
-        activity.id === leadId ? { ...activity, ...data } : activity
-      )
-    );
-    // Also update the selectedLead if it was the one being edited
-    setSelectedLead((prevLead) =>
-      prevLead && prevLead.id === leadId ? { ...prevLead, ...data } : prevLead
-    );
-
+  const handleUpdateLead = async (leadId: number, data: Partial<Lead>): Promise<void> => {
+    await new Promise((r) => setTimeout(r, 500));
+    setActivities((prev) => prev.map((a) => (a.id === leadId ? { ...a, ...data } : a)));
+    setSelectedLead((prev) => (prev && prev.id === leadId ? { ...prev, ...data } : prev));
     closePopup();
   };
 
-  // FIX 2: Moved openModal to the correct scope (inside Page component)
-  const openModal = (
-    action: "view" | "edit",
-    lead: Lead // Use Lead type
-  ) => {
+  const openModal = (action: "view" | "edit", lead: Lead) => {
     setSelectedLead(lead);
     setPopup(action);
   };
-
-  // FIX 3: Moved closePopup to the correct scope (inside Page component)
   const closePopup = () => setPopup(null);
 
   return (
-    <div>
-      <div className="p-6 space-y-6">
-        {/* Page Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-3xl font-bold text-foreground">
-              Leads Follow-Up
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Track and manage your lead follow-up activities
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="border-border bg-gradient-to-br from-[#264eaa] to-[#456ecf]">
-              <CalendarIcon className="w-4 h-4 mr-2" />
-              List View
-            </Button>
-            <Button variant="outline" className="border-border">
-              <CalendarIcon className="w-4 h-4 mr-2" />
-              Calendar View
-            </Button>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground bg-gradient-to-br from-[#264eaa] to-[#456ecf]">
-              <Plus className="w-4 h-4 mr-2" />
-              Schedule Follow-Up
-            </Button>
-          </div>
+    <div className="min-h-screen  text-white p-6 space-y-10">
+      {/* Page Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Leads Follow-Up</h2>
+          <p className="text-gray-400 text-sm mt-1">Track and manage your lead follow-up activities</p>
         </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {stats.map((stat) => (
-            <Card key={stat.title} className="p-6 bg-card  bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-border">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">
-                    {stat.title}
-                  </p>
-                  {stat.subtitle && (
-                    <p className="text-xs text-muted-foreground">
-                      {stat.subtitle}
-                    </p>
-                  )}
-                  {stat.change && (
-                    <span className="text-sm font-medium text-success">
-                      {stat.change}
-                    </span>
-                  )}
-                </div>
-                <div
-                  className={`w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center`}
-                >
-                  <stat.icon
-                    className={`w-6 h-6 ${
-                      stat.color === "bg-destructive"
-                        ? "text-destructive"
-                        : stat.color === "bg-warning"
-                        ? "text-warning"
-                        : stat.color === "bg-info"
-                        ? "text-info"
-                        : "text-success"
-                    }`}
-                  />
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-foreground">
-                {stat.value}
-              </div>
-            </Card>
-          ))}
+        <div className="flex gap-2">
+          <Button variant="outline" className="bg-cyan-900/20 text-cyan-300 border border-cyan-500/20 hover:bg-cyan-800/30 hover:text-cyan-100 transition-all">
+            <CalendarIcon className="w-4 h-4 mr-2" /> List View
+          </Button>
+          <Button variant="outline" className="bg-blue-900/20 text-blue-300 border border-blue-500/20 hover:bg-blue-800/30 transition-all">
+            <CalendarIcon className="w-4 h-4 mr-2" /> Calendar View
+          </Button>
+          <Button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:scale-105 transition-all shadow-[0_0_25px_rgba(0,255,255,0.4)] text-white">
+            <Plus className="w-4 h-4 mr-2" /> Schedule Follow-Up
+          </Button>
         </div>
-
-        {/* Filters */}
-        <div className="flex items-center gap-4 bg-gradient-to-br to-[#0f172a]">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-            <Input
-              placeholder="Search leads or companies..."
-              className="pl-10 bg-card border-border"
-            />
-          </div>
-
-          <Select defaultValue="all">
-            <SelectTrigger className="w-48 bg-card border-border">
-              <SelectValue placeholder="All Priorities" />
-            </SelectTrigger>
-            <SelectContent className="bg-popover border-border">
-              <SelectItem value="all">All Priorities</SelectItem>
-              <SelectItem value="high">High</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="low">Low</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select defaultValue="all">
-            <SelectTrigger className="w-48 bg-card border-border">
-              <SelectValue placeholder="All Types" />
-            </SelectTrigger>
-            <SelectContent className="bg-popover border-border">
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="call">Call</SelectItem>
-              <SelectItem value="email">Email</SelectItem>
-              <SelectItem value="meeting">Meeting</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select defaultValue="all">
-            <SelectTrigger className="w-48 bg-card border-border">
-              <SelectValue placeholder="All Status" />
-            </SelectTrigger>
-            <SelectContent className="bg-popover border-border">
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="overdue">Overdue</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Quick Filters */}
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-foreground">Quick filters:</span>
-          {quickFilters.map((filter) => (
-            <Button
-              key={filter.value}
-              variant={filter.variant}
-              size="sm"
-              className={
-                filter.variant === "destructive"
-                  ? "bg-destructive/20 text-destructive hover:bg-destructive/30"
-                  : filter.variant === "ghost"
-                  ? ""
-                  : "bg-warning/20 text-warning hover:bg-warning/30"
-              }
-            >
-              {filter.label}
-            </Button>
-          ))}
-        </div>
-
-        {/* Activities Table */}
-        <Card className="bg-card border-border bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  ">
-          <div className="p-6 border-b border-border flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-foreground">
-              Follow-Up Activities
-            </h3>
-            <span className="text-sm text-muted-foreground">
-              {activities.length} activities
-            </span>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="border-b border-border">
-                <tr>
-                  <th className="text-left p-4 text-sm font-medium text-muted-foreground">
-                    LEAD
-                  </th>
-                  <th className="text-left p-4 text-sm font-medium text-muted-foreground">
-                    TYPE
-                  </th>
-                  <th className="text-left p-4 text-sm font-medium text-muted-foreground">
-                    PRIORITY
-                  </th>
-                  <th className="text-left p-4 text-sm font-medium text-muted-foreground">
-                    SCHEDULED DATE
-                  </th>
-                  <th className="text-left p-4 text-sm font-medium text-muted-foreground">
-                    STATUS
-                  </th>
-                  <th className="text-left p-4 text-sm font-medium text-muted-foreground">
-                    ACTIONS
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {activities.map((activity) => (
-                  <tr
-                    key={activity.id}
-                    className="border-b border-border hover:bg-secondary/50"
-                  >
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="w-10 h-10 bg-info">
-                          <AvatarFallback className="text-white font-semibold">
-                            {activity.avatar}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <div className="font-medium text-foreground">
-                            {activity.name}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {activity.company}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-4">{activity.type}</td>
-                    <td className="p-4">
-                   <Badge
-  variant="secondary"
-  className={
-    activity.priority === "High"
-      ? "bg-red-500/15 text-red-600"
-      : activity.priority === "Medium"
-      ? "bg-amber-500/15 text-amber-600 "
-      : "bg-green-500/15 text-green-600 "
-  }
->
-  {activity.priority}
-</Badge>
-
-                    </td>
-                    <td className="p-4">
-                      <div className="text-sm text-foreground">
-                        {activity.scheduled}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        {activity.time}
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <Badge
-                        variant="secondary"
-                        className={
-                          activity.status === "Overdue"
-                            ? "bg-cyan-950 text-cyan-500"
-                            : activity.status === "Pending"
-                            ? "bg-pink-950 text-pink-500"
-                            : "bg-green-950 text-green-400"
-                        }
-                      >
-                        {activity.status}
-                      </Badge>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex gap-1">
-                        <Button
-                          onClick={() =>
-                            openModal("view", activityToLead(activity))
-                          }
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0 text-blue-400 hover:text-blue-300 hover:bg-blue-900/20"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0 text-green-500 hover:text-green-400 hover:bg-green-900/20"
-                          onClick={() => handleCompleteActivity(activity.id)}
-                        >
-                          <CheckCircle className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          onClick={() =>
-                            openModal("edit", activityToLead(activity))
-                          }
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-900/20"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
       </div>
-      <FollowModels
-        popup={popup}
-        lead={selectedLead}
-        closePopup={closePopup}
-        onUpdateLead={handleUpdateLead}
-      />
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {stats.map((s) => (
+          <Card key={s.title} className="p-6 rounded-2xl backdrop-blur-lg bg-gradient-to-br from-[#0f172a]/90 to-[#1e293b]/60 border border-cyan-400/20 shadow-[0_0_20px_rgba(0,255,255,0.1)] hover:shadow-[0_0_30px_rgba(0,255,255,0.25)] transition-all duration-300">
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <p className="text-sm text-gray-400">{s.title}</p>
+                {s.subtitle && <p className="text-xs text-gray-500">{s.subtitle}</p>}
+              </div>
+              <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-cyan-500/20 border border-cyan-400/30">
+                <s.icon className={`w-6 h-6 ${s.color}`} />
+              </div>
+            </div>
+            <p className="text-3xl font-semibold text-white">{s.value}</p>
+          </Card>
+        ))}
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-4 py-4 px-4 rounded-2xl backdrop-blur-lg bg-gradient-to-br from-[#0f172a]/70 to-[#1e293b]/40 border border-cyan-400/20 shadow-[0_0_15px_rgba(0,255,255,0.1)]">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+          <Input placeholder="Search leads or companies..." className="pl-10 bg-transparent border border-cyan-400/20 text-white placeholder:text-gray-500 focus:border-cyan-400" />
+        </div>
+        <Select>
+          <SelectTrigger className="w-48 bg-transparent border border-cyan-400/20 text-gray-300">
+            <SelectValue placeholder="All Priorities" />
+          </SelectTrigger>
+          <SelectContent className="bg-[#0f172a] border border-cyan-400/20 text-gray-300">
+            <SelectItem value="all">All Priorities</SelectItem>
+            <SelectItem value="high">High</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="low">Low</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Quick Filters */}
+      <div className="flex items-center gap-3">
+        <span className="text-sm text-gray-400">Quick filters:</span>
+        {quickFilters.map((filter) => (
+          <Button key={filter.value} variant={filter.variant} size="sm" className={`${filter.variant === "destructive"
+            ? "bg-red-900/40 text-red-400 hover:bg-red-900/60"
+            : filter.variant === "ghost"
+              ? "text-gray-400 hover:text-white"
+              : "bg-yellow-900/40 text-yellow-300 hover:bg-yellow-900/60"} transition-all`}>
+            {filter.label}
+          </Button>
+        ))}
+      </div>
+
+      {/* 🔥 Enhanced Follow-Up Activities Table */}
+      <Card className="overflow-hidden rounded-2xl backdrop-blur-xl bg-gradient-to-br from-[#0f172a]/90 via-[#1e293b]/70 to-[#0f172a]/60 border border-cyan-400/20 shadow-[0_0_40px_rgba(0,255,255,0.1)] hover:shadow-[0_0_50px_rgba(0,255,255,0.25)] transition-all duration-500">
+        <div className="p-6 border-b border-cyan-400/10 bg-gradient-to-r from-cyan-400/10 to-transparent flex items-center justify-between">
+          <h3 className="text-xl font-semibold text-cyan-300 flex items-center gap-2">
+            <CalendarIcon className="w-5 h-5 text-cyan-400" /> Follow-Up Activities
+          </h3>
+          <span className="text-sm text-gray-400 bg-cyan-500/10 px-3 py-1 rounded-lg border border-cyan-400/20">
+            {activities.length} activities
+          </span>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-gray-400 border-b border-cyan-400/10 uppercase text-xs tracking-wide">
+                {["Lead", "Type", "Priority", "Scheduled Date", "Status", "Actions"].map((h) => (
+                  <th key={h} className="text-left py-3 px-4 font-medium">
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {activities.map((a) => (
+                <tr key={a.id} className="border-b border-cyan-400/10 hover:bg-cyan-500/5 hover:shadow-[0_0_25px_rgba(0,255,255,0.1)] transition-all duration-300">
+                  <td className="p-4">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="w-10 h-10 bg-gradient-to-br from-cyan-600/30 to-blue-600/20 border border-cyan-400/20 shadow-[0_0_10px_rgba(0,255,255,0.2)]">
+                        <AvatarFallback className="text-white font-semibold">{a.avatar}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <div className="font-medium text-white">{a.name}</div>
+                        <div className="text-xs text-gray-400">{a.company}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="p-4 text-gray-300">{a.type}</td>
+                  <td className="p-4">
+                    <Badge className={`${a.priority === "High"
+                      ? "bg-red-600/20 text-red-400 border border-red-500/30"
+                      : a.priority === "Medium"
+                        ? "bg-yellow-500/15 text-yellow-400 border border-yellow-500/30"
+                        : "bg-green-600/15 text-green-400 border border-green-500/30"} backdrop-blur-sm shadow-[0_0_10px_rgba(0,0,0,0.15)]`}>
+                      {a.priority}
+                    </Badge>
+                  </td>
+                  <td className="p-4">
+                    <div className="text-white text-sm">{a.scheduled}</div>
+                    <div className="text-xs text-gray-500">{a.time}</div>
+                  </td>
+                  <td className="p-4">
+                    <Badge className={`${a.status === "Overdue"
+                      ? "bg-red-900/40 text-red-400 border border-red-400/30"
+                      : a.status === "Pending"
+                        ? "bg-yellow-900/40 text-yellow-400 border border-yellow-400/30"
+                        : "bg-green-900/40 text-green-400 border border-green-400/30"} backdrop-blur-sm`}>
+                      {a.status}
+                    </Badge>
+                  </td>
+                  <td className="p-4">
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="sm" className="text-cyan-300 hover:text-cyan-100 hover:bg-cyan-900/30" onClick={() => openModal("view", activityToLead(a))}>
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm" className="text-green-400 hover:text-green-300 hover:bg-green-900/20" onClick={() => handleCompleteActivity(a.id)}>
+                        <CheckCircle className="w-4 h-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm" className="text-yellow-300 hover:text-yellow-200 hover:bg-yellow-900/30" onClick={() => openModal("edit", activityToLead(a))}>
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+
+      <FollowModels popup={popup} lead={selectedLead} closePopup={closePopup} onUpdateLead={handleUpdateLead} />
     </div>
   );
 };

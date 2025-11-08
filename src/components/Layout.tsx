@@ -43,9 +43,9 @@ export default function Layout({ children }: LayoutProps) {
   const { data: session } = useSession();
 
   return (
-    <div className="min-h-screen  bg-gradient-to-br from-black via-black to-gray-600 flex w-full">
+    <div className="min-h-screen w-full flex bg-gradient-to-br from-[#000000] via-[#0a0a0a] to-[#111827]">
       {/* Sidebar */}
-      <aside className="w-60 bg-gradient-to-tl from-black via-[#080b12] to-[#0e1421] border-r border-b border-border max-h-screen rounded-md flex flex-col text-white">
+      <aside className="w-60 bg-[#0f172a] border-r border-b border-border max-h-screen rounded-md flex flex-col text-white">
         {/* Logo */}
         <div className="p-6 flex items-center  bg-gradient-to-br from-[#0f172a] to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] gap-3 ">
           <div className="w-10 border bg-cyan-500 text-white h-10 rounded-xl bg-primary flex items-center justify-center">
@@ -62,18 +62,33 @@ export default function Layout({ children }: LayoutProps) {
           {navigation.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? "bg-cyan-800/50 text-cyan-400 shadow-md"
-                    : "text-white/80 hover:bg-cyan-500/40 hover:text-white"
-                }`}
-              >
-                <item.icon className="w-5 h-5" />
-                {item.name}
-              </Link>
+             <Link
+  key={item.name}
+  href={item.href}
+  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-500 hover:scale-105 relative overflow-hidden ${
+    isActive
+      ? `
+        bg-gradient-to-br from-cyan-500/30 via-cyan-400/10 to-transparent
+        text-cyan-200 
+        border border-cyan-300/40 
+        shadow-[0_0_25px_rgba(0,255,255,0.25)]
+        backdrop-blur-xl 
+        before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-r before:from-cyan-400/40 before:to-transparent before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-40
+        after:absolute after:inset-[-2px] after:rounded-lg after:bg-gradient-to-r after:from-transparent after:via-cyan-400/20 after:to-transparent after:blur-md after:opacity-80
+      `
+      : `
+        text-white/80 
+        hover:text-white 
+        hover:bg-gradient-to-br hover:from-cyan-500/15 hover:to-cyan-400/10 
+        hover:border hover:border-cyan-300/30 
+        hover:shadow-[0_0_20px_rgba(0,255,255,0.2)]
+        backdrop-blur-md
+      `
+  }`}
+>
+  <item.icon className="w-5 h-5 drop-shadow-[0_0_6px_rgba(0,255,255,0.6)]" />
+  {item.name}
+</Link>
             );
           })}
 
