@@ -8,9 +8,7 @@ import {
   TrendingUp as ChartIcon,
   Calendar,
   Plus,
-  Eye,
   Edit,
-  CheckCircle,
   Image,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -62,7 +60,7 @@ const leads = [
     amount: "₹2,500",
     status: "New",
     avatar: "SJ",
-    color: "bg-info",
+    color: "bg-cyan-500/30",
   },
   {
     name: "Michael Chen",
@@ -70,7 +68,7 @@ const leads = [
     amount: "₹1,800",
     status: "Contacted",
     avatar: "MC",
-    color: "bg-info",
+    color: "bg-cyan-500/30",
   },
   {
     name: "Emily Davis",
@@ -78,7 +76,7 @@ const leads = [
     amount: "₹3,200",
     status: "In-Progress",
     avatar: "ED",
-    color: "bg-info",
+    color: "bg-cyan-500/30",
   },
   {
     name: "David Wilson",
@@ -86,15 +84,7 @@ const leads = [
     amount: "₹4,100",
     status: "Qualified",
     avatar: "DW",
-    color: "bg-info",
-  },
-  {
-    name: "Lisa Anderson",
-    company: "Consulting Firm",
-    amount: "₹2,900",
-    status: "New",
-    avatar: "LA",
-    color: "bg-info",
+    color: "bg-cyan-500/30",
   },
 ];
 
@@ -156,277 +146,155 @@ const reminders = [
   },
 ];
 
-const notes = [
-  {
-    name: "Sarah Johnson",
-    note: "Interested in premium package, needs pricing details",
-    time: "2 hours ago",
-    avatar: "AP",
-    color: "bg-primary",
-  },
-  {
-    name: "Michael Chen",
-    note: "Requested demo for next week, sent calendar link",
-    time: "4 hours ago",
-    avatar: "AP",
-    color: "bg-primary",
-  },
-  {
-    name: "Emily Davis",
-    note: "Budget approved, ready to proceed with proposal",
-    time: "1 day ago",
-    avatar: "AP",
-    color: "bg-primary",
-  },
-];
-
 export default function Dashboard() {
   useEffect(() => {
-    const fetchBanners = async () => {
+    const fetchLeads = async () => {
       try {
         const res = await axios.get("/api/leads");
         console.log(res.data);
       } catch (err) {
-        console.error("Error fetching banners:", err);
+        console.error("Error fetching leads:", err);
       }
     };
-    fetchBanners();
+    fetchLeads();
   }, []);
 
   return (
-    <div className="p-6 space-y-6 ">
+    <div className="p-8 space-y-8  min-h-screen text-white">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-foreground mb-1">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Welcome back, manage your leads and campaigns
+      <div className=" pb-4">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 text-transparent bg-clip-text">
+          Dashboard Overview
+        </h1>
+        <p className="text-gray-400 mt-2">
+          Manage your insights, leads & campaigns all in one place.
         </p>
       </div>
 
-      {/* Stats Grid */}
+      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
           <Card
             key={stat.title}
-            className="p-6 rounded-2xl bg-gradient-to-br from-[#0f172a]   to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] "
+            className="relative overflow-hidden rounded-2xl p-6 backdrop-blur-lg border border-cyan-400/20 bg-gradient-to-br from-cyan-500/10 to-blue-500/5 hover:shadow-[0_0_25px_rgba(0,255,255,0.3)] transition-all duration-500 hover:scale-[1.03]"
           >
-            <div className="flex items-start justify-between mb-4">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-transparent opacity-0 hover:opacity-20 transition-opacity"></div>
+
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-sm text-gray-400 mb-1">{stat.title}</p>
-                <div className="flex items-center gap-2  bg-green-950 rounded-2xl px-5">
-                  {stat.trend === "up" ? (
-                    <TrendingUp className="w-4 h-4 text-green-400" />
-                  ) : (
-                    <TrendingDown className="w-4 h-4 text-red-400" />
-                  )}
-                  <span
-                    className={`text-sm  font-medium ${
-                      stat.trend === "up" ? "text-green-400" : "text-red-400 "
-                    }`}
-                  >
-                    {stat.change}
-                  </span>
-                </div>
+                <p className="text-sm text-gray-400">{stat.title}</p>
+                <p className="text-3xl font-bold text-white">{stat.value}</p>
               </div>
-
-              <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                <stat.icon className="w-6 h-6 text-blue-400" />
+              <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-cyan-400/20">
+                <stat.icon className="w-6 h-6 text-cyan-300" />
               </div>
             </div>
 
-            <div className="text-3xl font-bold text-white mb-1">
-              {stat.value}
+            <div className="flex items-center gap-2">
+              {stat.trend === "up" ? (
+                <TrendingUp className="w-4 h-4 text-green-400" />
+              ) : (
+                <TrendingDown className="w-4 h-4 text-red-400" />
+              )}
+              <span
+                className={`text-sm ${
+                  stat.trend === "up" ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {stat.change}
+              </span>
+              <span className="text-xs text-gray-500">{stat.subtitle}</span>
             </div>
-            <p className="text-xs text-gray-500">{stat.subtitle}</p>
           </Card>
         ))}
       </div>
 
-      {/* Chart and Ad Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* <Card className="lg:col-span-2 p-6 bg-card border-border">
+      {/* Leads & Reminders */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Leads */}
+        <Card className="p-6 rounded-2xl backdrop-blur-xl bg-gradient-to-br from-[#0f172a]/80 to-[#1e293b]/40 border border-cyan-400/20 shadow-[0_0_20px_rgba(0,255,255,0.1)]">
           <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-xl font-semibold text-foreground">Leads To Follow-Up With</h2>
-              <p className="text-sm text-muted-foreground">Follow-up schedule for the last 3 months</p>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="ghost" size="sm" className="text-muted-foreground">Last 7 days</Button>
-              <Button variant="ghost" size="sm" className="text-muted-foreground">Last 30 days</Button>
-              <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">Last 3 months</Button>
-            </div>
-          </div>
-
-          Chart
-          <div className="relative h-64 flex items-end">
-            <svg className="w-full h-full" viewBox="0 0 800 200">
-              <path
-                d="M 0 150 Q 100 120, 200 100 T 400 80 T 600 60 T 800 40"
-                fill="none"
-                stroke="hsl(var(--chart))"
-                strokeWidth="3"
-                className="drop-shadow-[0_0_8px_rgba(0,204,255,0.5)]"
-              />
-              <circle cx="100" cy="120" r="4" fill="hsl(var(--chart))" />
-              <circle cx="200" cy="100" r="4" fill="hsl(var(--chart))" />
-              <circle cx="300" cy="90" r="4" fill="hsl(var(--chart))" />
-              <circle cx="400" cy="80" r="4" fill="hsl(var(--chart))" />
-              <circle cx="500" cy="70" r="4" fill="hsl(var(--chart))" />
-              <circle cx="600" cy="60" r="4" fill="hsl(var(--chart))" />
-              <circle cx="700" cy="50" r="4" fill="hsl(var(--chart))" />
-            </svg>
-          </div>
-
-          Legend
-          <div className="flex items-center justify-between mt-6 pt-6 border-t border-border">
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-info"></div>
-                <span className="text-sm text-foreground font-medium">Urgent</span>
-                <span className="text-sm text-muted-foreground">8</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-warning"></div>
-                <span className="text-sm text-foreground font-medium">This Week</span>
-                <span className="text-sm text-muted-foreground">15</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-chart"></div>
-                <span className="text-sm text-foreground font-medium">Next Week</span>
-                <span className="text-sm text-muted-foreground">12</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="destructive" className="rounded-full">3</Badge>
-                <span className="text-sm text-foreground font-medium">Overdue</span>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="border-border">
-                <Calendar className="w-4 h-4 mr-2" />
-                Schedule Follow-up
-              </Button>
-              <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Reminder
-              </Button>
-            </div>
-          </div>
-        </Card> */}
-      </div>
-
-      {/* Bottom Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2  gap-6">
-        {/* Leads To Follow-Up With */}
-        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a]  to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-foreground">
+            <h2 className="text-xl font-semibold text-cyan-300">
               Leads To Follow-Up With
             </h2>
-            <Button variant="ghost" size="sm" className="text-primary bg-blue-400">
+            <Button className="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/30">
               <Calendar className="w-4 h-4 mr-2" />
-              Schedule Follow-up
+              Schedule
             </Button>
           </div>
+
           <div className="space-y-4">
             {leads.map((lead) => (
               <div
                 key={lead.name}
-                className="flex items-center justify-between p-3 bg-secondary rounded-lg"
+                className="flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all"
               >
                 <div className="flex items-center gap-3">
-                  <Avatar className={`w-10 h-10 ${lead.color}`}>
-                    <AvatarFallback
-                      className={`${lead.color} text-white font-semibold`}
-                    >
+                  <Avatar className={`${lead.color}`}>
+                    <AvatarFallback className="text-white font-semibold">
                       {lead.avatar}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="font-medium text-foreground">
-                      {lead.name}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {lead.company}
-                    </div>
+                    <p className="font-medium text-white">{lead.name}</p>
+                    <p className="text-sm text-gray-400">{lead.company}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
-                    <div className="font-semibold text-foreground">
-                      {lead.amount}
-                    </div>
-                    <Badge
-                      variant="secondary"
-                      className={
-                        lead.status === "New"
-                          ? "bg-cyan-900 text-cyan-500"
-                          : lead.status === "Contacted"
-                          ? "bg-orange-950 text-orange-500"
-                          : lead.status === "In-Progress"
-                          ? "bg-yellow-950 text-yellow-500"
-                          : "bg-green-950 text-green-500"
-                      }
-                    >
-                      {lead.status}
-                    </Badge>
-                  </div>
+                <div className="text-right">
+                  <p className="font-semibold text-cyan-300">{lead.amount}</p>
+                  <Badge
+                    className={`${
+                      lead.status === "New"
+                        ? "bg-cyan-900 text-cyan-400"
+                        : lead.status === "Contacted"
+                        ? "bg-orange-900 text-orange-400"
+                        : lead.status === "In-Progress"
+                        ? "bg-yellow-900 text-yellow-400"
+                        : "bg-green-900 text-green-400"
+                    }`}
+                  >
+                    {lead.status}
+                  </Badge>
                 </div>
               </div>
             ))}
           </div>
         </Card>
 
-        {/* Upcoming Reminders */}
-        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a]  to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
+        {/* Reminders */}
+        <Card className="p-6 rounded-2xl backdrop-blur-xl bg-gradient-to-br from-[#0f172a]/80 to-[#1e293b]/40 border border-cyan-400/20 shadow-[0_0_20px_rgba(0,255,255,0.1)]">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-foreground">
+            <h2 className="text-xl font-semibold text-cyan-300">
               Upcoming Reminders
             </h2>
-            <div className="flex gap-2">
-              <Button variant="ghost" size="sm" className="text-primary bg-blue-400">
-                <Calendar className="w-4 h-4 mr-2" />
-                Schedule Follow-up
-              </Button>
-              <Button
-                size="sm"
-                className="bg-primary bg-blue-400 hover:bg-primary/90 text-primary-foreground"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Add Reminder
-              </Button>
-            </div>
+            <Button className="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/30">
+              <Plus className="w-4 h-4 mr-2" />
+              Add
+            </Button>
           </div>
+
           <div className="space-y-3">
-            {reminders.map((reminder) => (
+            {reminders.map((r) => (
               <div
-                key={reminder.name}
-                className="flex items-center justify-between p-3 bg-secondary rounded-lg"
+                key={r.name}
+                className="flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all"
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className={`w-10 h-10 rounded-full ${reminder.color} flex items-center justify-center`}
+                    className={`w-10 h-10 rounded-full ${r.color} flex items-center justify-center`}
                   >
                     <Calendar className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <div className="font-medium text-foreground">
-                      {reminder.name}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {reminder.company}
-                    </div>
+                    <p className="font-medium text-white">{r.name}</p>
+                    <p className="text-sm text-gray-400">{r.company}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <Badge
-                    variant="secondary"
-                    className="bg-primary/20 text-primary mb-1"
-                  >
-                    {reminder.type}
+                  <Badge className="bg-cyan-500/20 text-cyan-300 mb-1">
+                    {r.type}
                   </Badge>
-                  <div className="text-xs text-muted-foreground">
-                    {reminder.time}
-                  </div>
+                  <p className="text-xs text-gray-400">{r.time}</p>
                 </div>
               </div>
             ))}
@@ -434,94 +302,69 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* Reminders and Notes */}
+      {/* Campaigns + Ad */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Campaign Performance */}
-        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a]  to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)] ">
+        <Card className="p-6 rounded-2xl backdrop-blur-xl bg-gradient-to-br from-[#0f172a]/80 to-[#1e293b]/40 border border-cyan-400/20 shadow-[0_0_20px_rgba(0,255,255,0.1)]">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-foreground">
+            <h2 className="text-xl font-semibold text-cyan-300">
               Campaign Performance
             </h2>
-            <Button variant="ghost" size="sm" className="text-primary bg-blue-400">
-              View all
-            </Button>
           </div>
-          <div className="space-y-6">
-            {campaigns.map((campaign) => (
-              <div key={campaign.name}>
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <div className="font-medium text-foreground">
-                      {campaign.name}
-                    </div>
-                  </div>
-                  <Badge
-                    variant="secondary"
-                    className={
-                      campaign.status === "Active"
-                        ? "bg-green-950 text-green-500"
-                        : "bg-red-950 text-red-500"
-                    }
-                  >
-                    {campaign.status}
-                  </Badge>
+
+          {campaigns.map((c) => (
+            <div key={c.name} className="mb-5">
+              <div className="flex items-center justify-between mb-3">
+                <p className="font-medium text-white">{c.name}</p>
+                <Badge
+                  className={`${
+                    c.status === "Active"
+                      ? "bg-green-900 text-green-400"
+                      : "bg-red-900 text-red-400"
+                  }`}
+                >
+                  {c.status}
+                </Badge>
+              </div>
+              <div className="grid grid-cols-4 text-center">
+                <div>
+                  <p className="text-lg font-semibold text-white">{c.sent}</p>
+                  <p className="text-xs text-gray-400">Sent</p>
                 </div>
-                <div className="grid grid-cols-4 gap-4">
-                  <div>
-                    <div className="text-2xl font-bold text-foreground">
-                      {campaign.sent}
-                    </div>
-                    <div className="text-xs text-muted-foreground">Sent</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-info">
-                      {campaign.delivered}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      Delivered
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-chart">
-                      {campaign.opened}
-                    </div>
-                    <div className="text-xs text-muted-foreground">Opened</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-success">
-                      {campaign.replied}
-                    </div>
-                    <div className="text-xs text-muted-foreground">Replied</div>
-                  </div>
+                <div>
+                  <p className="text-lg font-semibold text-cyan-300">
+                    {c.delivered}
+                  </p>
+                  <p className="text-xs text-gray-400">Delivered</p>
+                </div>
+                <div>
+                  <p className="text-lg font-semibold text-blue-300">
+                    {c.opened}
+                  </p>
+                  <p className="text-xs text-gray-400">Opened</p>
+                </div>
+                <div>
+                  <p className="text-lg font-semibold text-green-300">
+                    {c.replied}
+                  </p>
+                  <p className="text-xs text-gray-400">Replied</p>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </Card>
 
-        {/* Ad Section */}
-        <Card className="p-6 bg-card border-border bg-gradient-to-br from-[#0f172a]  to-[#0f172a] border border-[#1e293b] shadow-[0_4px_20px_rgba(0,0,0,0.3)]  flex flex-col items-center justify-center text-center">
-          <div className="w-16 h-16 rounded-full bg-yellow-900  flex items-center justify-center mb-4">
-            <Image className="w-8 h-8 text-warning" />
+        {/* Ad */}
+        <Card className="p-8 text-center rounded-2xl backdrop-blur-xl bg-gradient-to-br from-[#0f172a]/80 to-[#1e293b]/40 border border-cyan-400/20 shadow-[0_0_20px_rgba(0,255,255,0.1)] hover:shadow-[0_0_40px_rgba(0,255,255,0.3)] transition-all">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400/20 to-pink-400/10 flex items-center justify-center mx-auto mb-4">
+            <Image className="w-8 h-8 text-yellow-300" />
           </div>
-          <h3 className="text-lg font-semibold text-foreground mb-2 flex items-center gap-2">
-            Upgrade to go ad-free <Edit className="w-4 h-4 text-destructive" />
+          <h3 className="text-lg font-semibold text-cyan-300 mb-2 flex items-center justify-center gap-2">
+            Upgrade to Pro <Edit className="w-4 h-4 text-pink-400" />
           </h3>
-          <p className="text-sm text-muted-foreground mb-6">
-            Remove ads and unlock premium features with SkyTouch Pro
+          <p className="text-sm text-gray-400 mb-6">
+            Remove ads and unlock premium analytics features.
           </p>
-          <div className="w-full p-6 mb-4 bg-pink-950 rounded-lg border border-border">
-            <div className="text-xs text-muted-foreground mb-2">
-              Sample Ad Space
-            </div>
-            <div className="text-sm font-medium text-primary">
-              Your Ad Will Display Here
-            </div>
-            <div className="text-xs text-muted-foreground">
-              XYZ Features Of Ads
-            </div>
-          </div>
-          <Button className="w-full bg-blue-400 hover:bg-primary/90 text-primary-foreground">
+          <Button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:scale-105 transition-all text-white font-semibold rounded-xl shadow-[0_0_15px_rgba(0,255,255,0.3)]">
             Get Pro Version
           </Button>
         </Card>
